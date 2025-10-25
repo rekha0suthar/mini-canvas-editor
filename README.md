@@ -1,7 +1,3 @@
-Here’s a **README.md** you can include in your project root. It explains setup, architecture, state management, and design assumptions — formatted professionally for GitHub.
-
----
-
 ## 🧩 Mini Image Layout Editor
 
 A mini React canvas editor that allows users to add, move, resize, and delete rectangles or images on a canvas. The app is built with **React**, **Redux Toolkit**, and **React Konva**, featuring undo/redo, persistent layouts, and a responsive UI.
@@ -13,7 +9,7 @@ A mini React canvas editor that allows users to add, move, resize, and delete re
 ```bash
 # 1. Clone the repository
 git clone <your-repo-url>
-cd mini-layout-editor
+cd mini-canvas-editor
 
 # 2. Install dependencies
 npm install
@@ -22,7 +18,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the app.
+Open [http://localhost:5173/](http://localhost:5173/) to view the app.
 
 ---
 
