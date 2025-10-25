@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectShape } from "../redux/shapesSlice";
+import { selectShape } from "../slices/shapesSlice";
 import "../styles/Sidebar.css";
 
 export default function Sidebar() {

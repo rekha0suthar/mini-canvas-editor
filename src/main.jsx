@@ -4,7 +4,7 @@ import App from "./App";
 import "./App.css";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import shapesReducer from "./redux/shapesSlice";
+import shapesReducer from "./slices/shapesSlice";
 
 const store = configureStore({
   reducer: { shapes: shapesReducer },

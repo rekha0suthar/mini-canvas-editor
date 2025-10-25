@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Stage, Layer, Rect, Image as KonvaImage, Transformer } from "react-konva";
 import { useDispatch, useSelector } from "react-redux";
-import { selectShape, updateShape } from "../redux/shapesSlice";
+import { selectShape, updateShape } from "../slices/shapesSlice";
 import useImage from "use-image"; // handles async image loading
 import "../styles/CanvasArea.css";
 

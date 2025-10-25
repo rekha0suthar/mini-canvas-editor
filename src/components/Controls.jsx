@@ -6,7 +6,7 @@ import {
   deleteSelected,
   undo,
   redo,
-} from "../redux/shapesSlice";
+} from "../slices/shapesSlice";
 import "../styles/Controls.css";
 
 export default function Controls() {
@@ -15,13 +15,19 @@ export default function Controls() {
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      const url = URL.createObjectURL(file);
-      dispatch(addImage(url));
-    } else {
+    if (!file || !file.type.startsWith("image/")) {
       alert("Please upload a valid image file.");
+      return;
     }
+  
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target.result; // permanent base64 string
+      dispatch(addImage(dataUrl));
+    };
+    reader.readAsDataURL(file); // ✅ converts image to base64
   };
+  
 
   return (
     <div className="controls">
