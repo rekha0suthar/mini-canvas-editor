@@ -2,7 +2,25 @@ import React, { useRef, useEffect, useState } from "react";
 import { Stage, Layer, Rect, Image as KonvaImage, Transformer } from "react-konva";
 import { useDispatch, useSelector } from "react-redux";
 import { selectShape, updateShape } from "../redux/shapesSlice";
+import useImage from "use-image"; // handles async image loading
 import "../styles/CanvasArea.css";
+
+const CanvasImage = ({ shape, isSelected, transformerRef, commonProps, dispatch }) => {
+  const [image] = useImage(shape.src, "anonymous"); // prevents broken state
+  return (
+    <KonvaImage
+      {...commonProps}
+      image={image}
+      stroke={isSelected ? "#1E40AF" : null}
+      strokeWidth={isSelected ? 3 : 0}
+      ref={(node) => {
+        if (isSelected && node && transformerRef.current) {
+          transformerRef.current.nodes([node]);
+        }
+      }}
+    />
+  );
+};
 
 const CanvasArea = () => {
   const shapes = useSelector((s) => s.shapes.items);
@@ -13,10 +31,10 @@ const CanvasArea = () => {
   const stageRef = useRef(null);
   const [canvasSize, setCanvasSize] = useState({ width: 800, height: 600 });
 
-  // ---------- Responsive canvas resizing ----------
+  // ---------- Responsive canvas ----------
   useEffect(() => {
     const updateSize = () => {
-      const maxWidth = Math.min(window.innerWidth - 300, 900);
+      const maxWidth = Math.min(window.innerWidth - 320, 900);
       const maxHeight = Math.min(window.innerHeight - 200, 600);
       setCanvasSize({ width: maxWidth, height: maxHeight });
     };
@@ -25,12 +43,11 @@ const CanvasArea = () => {
     return () => window.removeEventListener("resize", updateSize);
   }, []);
 
-  // ---------- Selection & Transformer attachment ----------
+  // ---------- Transformer logic ----------
   useEffect(() => {
     const stage = stageRef.current;
     const transformer = transformerRef.current;
-
-    if (!stage || !transformer) return; // safety check
+    if (!stage || !transformer) return;
 
     const selectedNode = stage.findOne(`#shape-${selectedId}`);
     if (selectedNode) transformer.nodes([selectedNode]);
@@ -38,13 +55,14 @@ const CanvasArea = () => {
     transformer.getLayer()?.batchDraw();
   }, [selectedId, shapes]);
 
+  // ---------- Click outside to deselect ----------
   const handleStageClick = (e) => {
     if (e.target === e.target.getStage()) {
       dispatch(selectShape(null));
     }
   };
 
-  // ---------- Prevent dragging outside boundaries ----------
+  // ---------- Keep shapes within canvas ----------
   const checkBoundaries = (x, y, width, height) => {
     const { width: canvasWidth, height: canvasHeight } = canvasSize;
     return {
@@ -124,19 +142,14 @@ const CanvasArea = () => {
             }
 
             if (shape.type === "image") {
-              const img = new window.Image();
-              img.src = shape.src;
               return (
-                <KonvaImage
-                  {...commonProps}
-                  image={img}
-                  stroke={isSelected ? "#1E40AF" : null}
-                  strokeWidth={isSelected ? 3 : 0}
-                  ref={(node) => {
-                    if (isSelected && node && transformerRef.current) {
-                      transformerRef.current.nodes([node]);
-                    }
-                  }}
+                <CanvasImage
+                  key={shape.id}
+                  shape={shape}
+                  isSelected={isSelected}
+                  transformerRef={transformerRef}
+                  commonProps={commonProps}
+                  dispatch={dispatch}
                 />
               );
             }
