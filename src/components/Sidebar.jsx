@@ -1,29 +1,35 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectShape } from "../redux/shapesSlice";
+import "../styles/Sidebar.css";
 
-const Sidebar = () => {
+export default function Sidebar() {
   const shapes = useSelector((s) => s.shapes.items);
   const selectedId = useSelector((s) => s.shapes.selectedId);
   const dispatch = useDispatch();
 
   return (
     <div className="sidebar">
-      <h3>Elements</h3>
-      {shapes.length === 0 && <p>No elements yet</p>}
+      <h2>Elements</h2>
       <ul>
         {shapes.map((shape) => (
           <li
             key={shape.id}
-            className={selectedId === shape.id ? "selected" : ""}
             onClick={() => dispatch(selectShape(shape.id))}
+            className={selectedId === shape.id ? "selected" : ""}
           >
-            {shape.type.toUpperCase()} #{shape.id} — ({shape.x}, {shape.y})
+            <div className="shape-title">
+              {shape.type.toUpperCase()} #{shape.id}
+            </div>
+            <div className="shape-meta">
+              ({Math.round(shape.x)}, {Math.round(shape.y)})
+            </div>
           </li>
         ))}
       </ul>
+      {shapes.length === 0 && (
+        <p className="empty">No shapes added yet. Use the toolbar above.</p>
+      )}
     </div>
   );
-};
-
-export default Sidebar;
+}

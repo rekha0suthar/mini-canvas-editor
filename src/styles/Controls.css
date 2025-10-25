@@ -1,0 +1,37 @@
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .controls button,
+  .upload-btn {
+    background-color: #4f46e5;
+    color: #ffffff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .controls button:hover,
+  .upload-btn:hover {
+    background-color: #4338ca;
+  }
+  
+  .controls button.disabled {
+    background-color: #cbd5e1;
+    cursor: not-allowed;
+  }
+  
+  .upload-btn {
+    background-color: #059669;
+  }
+  
+  .upload-btn:hover {
+    background-color: #047857;
+  }
+  

@@ -1,8 +1,15 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addRectangle, addImage, deleteSelected } from "../redux/shapesSlice";
+import {
+  addRectangle,
+  addImage,
+  deleteSelected,
+  undo,
+  redo,
+} from "../redux/shapesSlice";
+import "../styles/Controls.css";
 
-const Controls = () => {
+export default function Controls() {
   const dispatch = useDispatch();
   const selectedId = useSelector((s) => s.shapes.selectedId);
 
@@ -12,7 +19,7 @@ const Controls = () => {
       const url = URL.createObjectURL(file);
       dispatch(addImage(url));
     } else {
-      alert("Please upload a valid image file");
+      alert("Please upload a valid image file.");
     }
   };
 
@@ -23,14 +30,15 @@ const Controls = () => {
         Upload Image
         <input type="file" accept="image/*" hidden onChange={handleImageUpload} />
       </label>
+      <button onClick={() => dispatch(undo())}>Undo</button>
+      <button onClick={() => dispatch(redo())}>Redo</button>
       <button
+        className={selectedId ? "" : "disabled"}
         onClick={() => dispatch(deleteSelected())}
         disabled={!selectedId}
       >
-        Delete Selected
+        Delete
       </button>
     </div>
   );
-};
-
-export default Controls;
+}
